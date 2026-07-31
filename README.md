@@ -15,6 +15,8 @@
 | API Key | 供应商的 Bearer API Key |
 | Model | `Qwen/Qwen3-VL-32B-Instruct` |
 
+`Base URL` 在插件配置中是下拉选项，已预置 SiliconFlow、OpenAI、OpenRouter、阿里云百炼、Moonshot、DeepSeek、LM Studio 和 Ollama。不同平台可用的视觉模型不同，`Model` 仍需根据平台文档手动填写。当前下拉列表面向 OpenAI 兼容接口，不兼容该格式的平台不能直接使用。
+
 安装后将 `LLM OCR` 加入文字识别服务列表，使用 Pot 的截图 OCR 快捷键框选区域即可识别。
 
 ## 接口要求

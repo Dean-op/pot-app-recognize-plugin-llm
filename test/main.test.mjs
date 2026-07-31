@@ -4,12 +4,23 @@ import assert from "node:assert/strict";
 import vm from "node:vm";
 
 const source = await readFile(new URL("../main.js", import.meta.url), "utf8");
+const info = JSON.parse(await readFile(new URL("../info.json", import.meta.url), "utf8"));
 
 async function loadRecognize() {
     const context = {};
     vm.runInNewContext(`${source}\nthis.recognize = recognize;`, context);
     return context.recognize;
 }
+
+test("provides mainstream Base URL presets", () => {
+    const baseUrl = info.needs.find((item) => item.key === "base_url");
+
+    assert.equal(baseUrl.type, "select");
+    assert.equal(baseUrl.options["https://api.siliconflow.cn/v1"], "SiliconFlow");
+    assert.equal(baseUrl.options["https://api.openai.com/v1"], "OpenAI");
+    assert.equal(baseUrl.options["https://openrouter.ai/api/v1"], "OpenRouter");
+    assert.equal(baseUrl.options["http://localhost:1234/v1"], "LM Studio (Local)");
+});
 
 test("normalizes base URL and sends a multimodal request", async () => {
     let request;
