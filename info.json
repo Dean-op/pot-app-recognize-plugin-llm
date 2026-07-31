@@ -1,0 +1,35 @@
+{
+  "id": "plugin.com.example.llm_ocr",
+  "plugin_type": "recognize",
+  "icon": "icon.svg",
+  "display": "LLM OCR",
+  "homepage": "https://github.com/yourname/pot-app-recognize-plugin-llm",
+  "needs": [
+    {
+      "key": "base_url",
+      "display": "Base URL",
+      "type": "input"
+    },
+    {
+      "key": "apiKey",
+      "display": "API Key",
+      "type": "input"
+    },
+    {
+      "key": "model",
+      "display": "Model",
+      "type": "input"
+    }
+  ],
+  "language": {
+    "auto": "auto",
+    "zh_cn": "Chinese",
+    "zh_tw": "Traditional Chinese",
+    "en": "English",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "fr": "French",
+    "de": "German",
+    "es": "Spanish"
+  }
+}
