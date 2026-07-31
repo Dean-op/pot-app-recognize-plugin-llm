@@ -48,7 +48,12 @@ async function recognize(base64, lang, options) {
 
     const apiKey = (config.apiKey || "").trim();
     const model = (config.model || "").trim();
-    const endpoint = normalizeEndpoint(config.base_url);
+    const selectedBaseUrl = (config.base_url || "").trim();
+    const customBaseUrl = (config.custom_base_url || "").trim();
+    const baseUrl = selectedBaseUrl === "__custom__"
+        ? customBaseUrl
+        : selectedBaseUrl || customBaseUrl;
+    const endpoint = normalizeEndpoint(baseUrl);
 
     if (!apiKey) {
         throw "API Key not found";

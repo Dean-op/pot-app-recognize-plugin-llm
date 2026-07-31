@@ -20,6 +20,8 @@ test("provides mainstream Base URL presets", () => {
     assert.equal(baseUrl.options["https://api.openai.com/v1"], "OpenAI");
     assert.equal(baseUrl.options["https://openrouter.ai/api/v1"], "OpenRouter");
     assert.equal(baseUrl.options["http://localhost:1234/v1"], "LM Studio (Local)");
+    assert.equal(baseUrl.options.__custom__, "Custom");
+    assert.equal(info.needs.some((item) => item.key === "custom_base_url"), true);
 });
 
 test("normalizes base URL and sends a multimodal request", async () => {
@@ -48,6 +50,30 @@ test("normalizes base URL and sends a multimodal request", async () => {
     assert.equal(request.options.headers.Authorization, "Bearer test-key");
     assert.equal(request.options.body.payload.model, "vision-model");
     assert.equal(request.options.body.payload.messages[0].content[1].image_url.url, "data:image/png;base64,aGVsbG8=");
+});
+
+test("uses a manually entered custom base URL", async () => {
+    let requestUrl;
+    const recognize = await loadRecognize();
+    await recognize("aGVsbG8=", "auto", {
+        config: {
+            base_url: "__custom__",
+            custom_base_url: "https://custom.example/v1",
+            apiKey: "test-key",
+            model: "vision-model"
+        },
+        utils: {
+            tauriFetch: async (url) => {
+                requestUrl = url;
+                return {
+                    ok: true,
+                    data: { choices: [{ message: { content: "自定义地址结果" } }] }
+                };
+            }
+        }
+    });
+
+    assert.equal(requestUrl, "https://custom.example/v1/chat/completions");
 });
 
 test("returns array-form message content", async () => {

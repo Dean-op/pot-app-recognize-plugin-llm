@@ -11,11 +11,12 @@
 
 | 配置项 | 示例 |
 | --- | --- |
-| Base URL | `https://api.siliconflow.cn/v1` |
+| Base URL | 从下拉列表选择平台，或选择 `Custom` |
+| Custom Base URL | 选择 `Custom` 后填写，例如 `https://example.com/v1` |
 | API Key | 供应商的 Bearer API Key |
 | Model | `Qwen/Qwen3-VL-32B-Instruct` |
 
-`Base URL` 在插件配置中是下拉选项，已预置 SiliconFlow、OpenAI、OpenRouter、阿里云百炼、Moonshot、DeepSeek、LM Studio 和 Ollama。不同平台可用的视觉模型不同，`Model` 仍需根据平台文档手动填写。当前下拉列表面向 OpenAI 兼容接口，不兼容该格式的平台不能直接使用。
+`Base URL` 在插件配置中是下拉选项，已预置 SiliconFlow、OpenAI、OpenRouter、阿里云百炼、Moonshot、DeepSeek、LM Studio 和 Ollama。需要接入其他平台时选择 `Custom`，再在 `Custom Base URL` 中手动填写地址。不同平台可用的视觉模型不同，`Model` 仍需根据平台文档手动填写。当前下拉列表面向 OpenAI 兼容接口，不兼容该格式的平台不能直接使用。
 
 安装后将 `LLM OCR` 加入文字识别服务列表，使用 Pot 的截图 OCR 快捷键框选区域即可识别。
 
@@ -28,7 +29,7 @@
 - `image_url` 多模态消息内容；
 - 非流式 JSON 响应中的 `choices[0].message.content`。
 
-Base URL 可以填写服务根地址、带 `/v1` 的地址或完整的 `/chat/completions` 地址。插件会自动补全缺失路径。
+预置地址和 `Custom Base URL` 都可以填写服务根地址、带 `/v1` 的地址或完整的 `/chat/completions` 地址，插件会自动补全缺失路径。
 
 ## 开发与打包
 
