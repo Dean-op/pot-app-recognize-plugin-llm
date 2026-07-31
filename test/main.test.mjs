@@ -66,3 +66,55 @@ test("returns array-form message content", async () => {
 
     assert.equal(result, "第一行\n第二行");
 });
+
+test("rejects incomplete configuration", async () => {
+    const recognize = await loadRecognize();
+    await assert.rejects(
+        recognize("aGVsbG8=", "auto", {
+            config: { apiKey: "test-key", model: "vision-model" },
+            utils: { tauriFetch: async () => ({ ok: true }) }
+        }),
+        (error) => error === "Base URL not found"
+    );
+});
+
+test("reports provider HTTP errors without leaking request credentials", async () => {
+    const recognize = await loadRecognize();
+    await assert.rejects(
+        recognize("aGVsbG8=", "auto", {
+            config: {
+                base_url: "https://example.com/v1",
+                apiKey: "secret-test-key",
+                model: "vision-model"
+            },
+            utils: {
+                tauriFetch: async () => ({
+                    ok: false,
+                    status: 401,
+                    data: { error: { message: "invalid api key" } }
+                })
+            }
+        }),
+        (error) => error === 'HTTP 401: {"error":{"message":"invalid api key"}}'
+    );
+});
+
+test("rejects empty model output", async () => {
+    const recognize = await loadRecognize();
+    await assert.rejects(
+        recognize("aGVsbG8=", "auto", {
+            config: {
+                base_url: "https://example.com",
+                apiKey: "test-key",
+                model: "vision-model"
+            },
+            utils: {
+                tauriFetch: async () => ({
+                    ok: true,
+                    data: { choices: [{ message: { content: "   " } }] }
+                })
+            }
+        }),
+        (error) => error === "LLM returned empty text"
+    );
+});

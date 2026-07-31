@@ -1,31 +1,49 @@
 # Pot App LLM OCR 插件
 
-这是一个 Pot App 外部 OCR 插件，使用 OpenAI 兼容的多模态接口识别截图文字。
+这是一个 Pot App 外部 OCR 插件，使用 OpenAI 兼容的多模态接口识别截图文字。插件不保存 API Key，也不包含任何默认密钥。
 
-当前 `info.json` 使用了示例插件 ID 和仓库地址；本地安装不受影响，发布到插件列表前请替换为你自己的唯一 ID 和仓库地址。
+## 使用
 
-## 配置
+1. 运行 `npm run build`。
+2. 在 Pot 中打开“服务设置 → 文字识别 → 添加外部插件”。
+3. 选择 `dist/plugin.com.dean-op.llm_ocr.potext`。
+4. 编辑 `LLM OCR` 服务，填写下面三项：
 
-安装插件后，只需要填写：
+| 配置项 | 示例 |
+| --- | --- |
+| Base URL | `https://api.siliconflow.cn/v1` |
+| API Key | 供应商的 Bearer API Key |
+| Model | `Qwen/Qwen3-VL-32B-Instruct` |
 
-- `Base URL`：例如 `https://api.openai.com`、`https://api.openai.com/v1`，也支持填写完整的 `/chat/completions` 地址。
-- `API Key`：以 Bearer 方式发送。
-- `Model`：视觉模型名称，例如 `gpt-4o`、`gpt-4o-mini` 或供应商提供的模型名。
+安装后将 `LLM OCR` 加入文字识别服务列表，使用 Pot 的截图 OCR 快捷键框选区域即可识别。
 
-## 要求
+## 接口要求
 
-第三方服务必须支持 OpenAI 风格的 `POST /v1/chat/completions` 多模态请求，并接受 `image_url` 类型的图片内容。
+第三方服务必须支持：
 
-## 开发
+- `POST /v1/chat/completions` 或完整的 `/chat/completions` 地址；
+- OpenAI 风格的 `Authorization: Bearer <API_KEY>`；
+- `image_url` 多模态消息内容；
+- 非流式 JSON 响应中的 `choices[0].message.content`。
 
-需要 Node.js 18 或更高版本。
+Base URL 可以填写服务根地址、带 `/v1` 的地址或完整的 `/chat/completions` 地址。插件会自动补全缺失路径。
+
+## 开发与打包
+
+需要 Node.js 18 或更高版本：
 
 ```powershell
 npm test
 npm run build
 ```
 
-构建产物位于 `dist/plugin.com.example.llm_ocr.potext`。在 Pot 中打开“服务设置 → 文字识别 → 添加外部插件”安装它。
+构建产物位于 `dist/plugin.com.dean-op.llm_ocr.potext`。`.potext` 内部只包含 Pot 运行所需的 `main.js`、`info.json` 和 `icon.svg`。
+
+## 发布前检查
+
+- 如果更换了维护者或仓库地址，请同步修改 `info.json` 的 `id` 和 `homepage`。
+- 插件 ID 必须保持唯一；修改 ID 后，需要在 Pot 中卸载旧插件再安装新包。
+- 不要把 API Key 写入源代码、README、测试或 Git 历史。
 
 ## 隐私
 

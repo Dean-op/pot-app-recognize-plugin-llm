@@ -1,9 +1,9 @@
 {
-  "id": "plugin.com.example.llm_ocr",
+  "id": "plugin.com.dean-op.llm_ocr",
   "plugin_type": "recognize",
   "icon": "icon.svg",
   "display": "LLM OCR",
-  "homepage": "https://github.com/yourname/pot-app-recognize-plugin-llm",
+  "homepage": "https://github.com/Dean-op/pot-app-recognize-plugin-llm",
   "needs": [
     {
       "key": "base_url",

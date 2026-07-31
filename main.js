@@ -1,5 +1,9 @@
 function normalizeEndpoint(baseUrl) {
-    let endpoint = (baseUrl || "https://api.openai.com").trim();
+    let endpoint = (baseUrl || "").trim();
+
+    if (!endpoint) {
+        throw "Base URL not found";
+    }
 
     if (!/^https?:\/\//i.test(endpoint)) {
         endpoint = `https://${endpoint}`;
@@ -39,7 +43,7 @@ function extractText(data) {
 }
 
 async function recognize(base64, lang, options) {
-    const { config, utils } = options;
+    const { config = {}, utils = {} } = options || {};
     const { tauriFetch } = utils;
 
     const apiKey = (config.apiKey || "").trim();
@@ -52,6 +56,10 @@ async function recognize(base64, lang, options) {
 
     if (!model) {
         throw "Model not found";
+    }
+
+    if (typeof base64 !== "string" || base64.trim().length === 0) {
+        throw "Image data not found";
     }
 
     if (typeof tauriFetch !== "function") {
@@ -109,8 +117,16 @@ async function recognize(base64, lang, options) {
 
     if (!response || !response.ok) {
         const status = response?.status ?? "unknown";
-        throw `HTTP ${status}: ${JSON.stringify(response?.data)}`;
+        const detail = response?.data === undefined
+            ? "No response body"
+            : JSON.stringify(response.data);
+        throw `HTTP ${status}: ${detail}`;
     }
 
-    return extractText(response.data).trim();
+    const result = extractText(response.data).trim();
+    if (!result) {
+        throw "LLM returned empty text";
+    }
+
+    return result;
 }
