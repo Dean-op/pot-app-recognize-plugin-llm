@@ -1,42 +1,68 @@
 # Pot App LLM OCR 插件
 
-这是一个使用 OpenAI 兼容多模态接口识别截图文字的 Pot App 外部插件。插件只提供手动配置，不预置任何服务商地址或模型。
+## 介绍
 
-## 使用
+这是一个为 [Pot App](https://github.com/pot-app/pot-desktop) 提供截图文字识别能力的外部插件。它将截图以图片输入发送至兼容 OpenAI `chat/completions` 协议的多模态模型，并将返回的纯文本交给 Pot 显示。
 
-1. 运行 `npm run build`。
+插件不绑定具体服务商，配置界面只保留三个字段：`Base URL`、`API Key` 和 `Model`。因此可以接入任意满足接口要求的视觉模型服务。
+
+## 快速开始与示例
+
+### 安装插件
+
+1. 运行以下命令生成插件包：
+
+   ```powershell
+   npm test
+   npm run build
+   ```
+
+   构建包会包含运行文件以及 GPL-3.0 许可证文件 `LICENSE`。
+
 2. 在 Pot 中打开“服务设置 → 文字识别 → 添加外部插件”。
 3. 选择 `dist/plugin.com.dean-op.llm_ocr.potext`。
-4. 编辑 `LLM OCR`，填写三项配置：
+4. 编辑 `LLM OCR` 服务，填写 API Key 和模型配置。
 
-| 配置项 | 示例 |
+### SiliconFlow 示例
+
+| 配置项 | 值 |
 | --- | --- |
 | Base URL | `https://api.siliconflow.cn/v1` |
-| API Key | 供应商的 Bearer API Key |
+| API Key | SiliconFlow API Key |
 | Model | `Qwen/Qwen3-VL-32B-Instruct` |
 
-Base URL 可以填写服务根地址、带 `/v1` 的地址或完整的 `/chat/completions` 地址，插件会自动补全缺失路径。
+完成配置后，将 `LLM OCR` 加入 Pot 的文字识别服务列表，使用截图 OCR 快捷键框选区域即可识别。
+
+### Base URL 写法
+
+下面三种写法均可使用，插件会自动补全缺失的 `/v1/chat/completions` 路径：
+
+```text
+https://example.com
+https://example.com/v1
+https://example.com/v1/chat/completions
+```
 
 ## 接口要求
 
-服务必须支持：
+服务需要支持以下能力：
 
-- `POST /v1/chat/completions` 或完整的 `/chat/completions` 地址；
-- `Authorization: Bearer <API_KEY>`；
-- `image_url` 多模态消息内容；
-- 非流式 JSON 响应中的 `choices[0].message.content`。
+- `POST /v1/chat/completions`，或等效的完整 `/chat/completions` 地址；
+- `Authorization: Bearer <API_KEY>` 身份验证；
+- OpenAI 风格的 `image_url` 多模态消息内容；
+- 非流式 JSON 响应，其中识别文本位于 `choices[0].message.content`。
 
-## 开发与打包
+模型必须具备图片理解能力。纯文本模型无法识别截图内容。
 
-需要 Node.js 18 或更高版本：
+## 隐私说明
 
-```powershell
-npm test
-npm run build
-```
+- 插件不内置、记录或提交 API Key。
+- 截图会发送至你在 `Base URL` 中配置的第三方服务。
+- 请在使用前确认该服务商的数据处理和隐私政策，避免上传账号凭据、身份证件、商业机密等敏感内容。
+- API 调用可能产生模型费用，额度与计费规则由服务商决定。
 
-构建产物的根目录只包含 Pot 运行所需的 `main.js`、`info.json` 和 `icon.svg`。
+## 开源协议
 
-## 隐私
+Copyright (C) 2026 Dean-op.
 
-插件不保存 API Key，也不包含默认密钥。截图会上传到配置的第三方服务，请确认服务商的隐私政策并避免识别敏感信息。
+本项目以 [GNU General Public License v3.0](LICENSE) 发布。你可以在遵守该协议的前提下使用、修改和分发本项目。

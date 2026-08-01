@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2026 Dean-op
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 function normalizeEndpoint(baseUrl) {
     let endpoint = (baseUrl || "").trim();
 

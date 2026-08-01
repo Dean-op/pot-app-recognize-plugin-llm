@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $distDir = Join-Path $projectRoot "dist"
 $infoPath = Join-Path $projectRoot "info.json"
-$requiredFiles = @("main.js", "info.json", "icon.svg")
+$requiredFiles = @("main.js", "info.json", "icon.svg", "LICENSE")
 
 foreach ($file in $requiredFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $projectRoot $file))) {
