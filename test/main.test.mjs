@@ -5,7 +5,6 @@ import vm from "node:vm";
 
 const source = await readFile(new URL("../main.js", import.meta.url), "utf8");
 const info = JSON.parse(await readFile(new URL("../info.json", import.meta.url), "utf8"));
-const customInfo = JSON.parse(await readFile(new URL("../custom/info.json", import.meta.url), "utf8"));
 
 async function loadRecognize() {
     const context = {};
@@ -13,23 +12,11 @@ async function loadRecognize() {
     return context.recognize;
 }
 
-test("provides mainstream Base URL presets", () => {
+test("provides a single manually editable Base URL field", () => {
     const baseUrl = info.needs.find((item) => item.key === "base_url");
 
-    assert.equal(baseUrl.type, "select");
-    assert.equal(baseUrl.options["https://api.siliconflow.cn/v1"], "SiliconFlow");
-    assert.equal(baseUrl.options["https://api.openai.com/v1"], "OpenAI");
-    assert.equal(baseUrl.options["https://openrouter.ai/api/v1"], "OpenRouter");
-    assert.equal(baseUrl.options["http://localhost:1234/v1"], "LM Studio (Local)");
-    assert.equal(info.needs.some((item) => item.key === "custom_base_url"), false);
-});
-
-test("provides a separate custom URL plugin", () => {
-    const baseUrl = customInfo.needs.find((item) => item.key === "base_url");
-
-    assert.equal(customInfo.id, "plugin.com.dean-op.llm_ocr_custom");
     assert.equal(baseUrl.type, "input");
-    assert.equal(customInfo.needs.some((item) => item.key === "custom_base_url"), false);
+    assert.deepEqual(info.needs.map((item) => item.key), ["base_url", "apiKey", "model"]);
 });
 
 test("normalizes base URL and sends a multimodal request", async () => {
