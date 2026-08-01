@@ -47,15 +47,6 @@
 
 ![英文识别效果](./img/识别效果en.png)
 
-### Base URL 写法
-
-下面三种写法均可使用，插件会自动补全缺失的 `/v1/chat/completions` 路径：
-
-```text
-https://example.com
-https://example.com/v1
-https://example.com/v1/chat/completions
-```
 
 ## 接口要求
 
@@ -76,7 +67,5 @@ https://example.com/v1/chat/completions
 - API 调用可能产生模型费用，额度与计费规则由服务商决定。
 
 ## 开源协议
-
-Copyright (C) 2026 Dean-op.
 
 本项目以 [GNU General Public License v3.0](LICENSE) 发布。你可以在遵守该协议的前提下使用、修改和分发本项目。
