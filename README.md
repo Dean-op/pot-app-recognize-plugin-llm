@@ -18,6 +18,8 @@
 
 `Base URL` 在插件配置中是下拉选项，已预置 SiliconFlow、OpenAI、OpenRouter、阿里云百炼、Moonshot、DeepSeek、LM Studio 和 Ollama。需要接入其他平台时选择 `Custom`，再在 `Custom Base URL` 中手动填写地址。不同平台可用的视觉模型不同，`Model` 仍需根据平台文档手动填写。当前下拉列表面向 OpenAI 兼容接口，不兼容该格式的平台不能直接使用。
 
+Pot 当前的外部插件配置窗口不支持根据下拉选项动态禁用输入框，因此 `Custom Base URL` 会始终显示；选择预置平台时插件会忽略该输入，只有选择 `Custom` 时才会使用它。
+
 安装后将 `LLM OCR` 加入文字识别服务列表，使用 Pot 的截图 OCR 快捷键框选区域即可识别。
 
 ## 接口要求
@@ -42,11 +44,7 @@ npm run build
 
 构建产物位于 `dist/plugin.com.dean-op.llm_ocr.potext`。`.potext` 内部只包含 Pot 运行所需的 `main.js`、`info.json` 和 `icon.svg`。
 
-## 发布前检查
 
-- 如果更换了维护者或仓库地址，请同步修改 `info.json` 的 `id` 和 `homepage`。
-- 插件 ID 必须保持唯一；修改 ID 后，需要在 Pot 中卸载旧插件再安装新包。
-- 不要把 API Key 写入源代码、README、测试或 Git 历史。
 
 ## 隐私
 

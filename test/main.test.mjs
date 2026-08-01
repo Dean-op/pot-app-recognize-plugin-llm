@@ -76,6 +76,30 @@ test("uses a manually entered custom base URL", async () => {
     assert.equal(requestUrl, "https://custom.example/v1/chat/completions");
 });
 
+test("preset base URL takes precedence over custom input", async () => {
+    let requestUrl;
+    const recognize = await loadRecognize();
+    await recognize("aGVsbG8=", "auto", {
+        config: {
+            base_url: "https://api.siliconflow.cn/v1",
+            custom_base_url: "https://custom.example/v1",
+            apiKey: "test-key",
+            model: "vision-model"
+        },
+        utils: {
+            tauriFetch: async (url) => {
+                requestUrl = url;
+                return {
+                    ok: true,
+                    data: { choices: [{ message: { content: "预置地址结果" } }] }
+                };
+            }
+        }
+    });
+
+    assert.equal(requestUrl, "https://api.siliconflow.cn/v1/chat/completions");
+});
+
 test("returns array-form message content", async () => {
     const recognize = await loadRecognize();
     const result = await recognize("aGVsbG8=", "auto", {
