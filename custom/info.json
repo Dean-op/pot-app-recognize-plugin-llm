@@ -1,24 +1,14 @@
 {
-  "id": "plugin.com.dean-op.llm_ocr",
+  "id": "plugin.com.dean-op.llm_ocr_custom",
   "plugin_type": "recognize",
   "icon": "icon.svg",
-  "display": "LLM OCR",
+  "display": "LLM OCR (Custom)",
   "homepage": "https://github.com/Dean-op/pot-app-recognize-plugin-llm",
   "needs": [
     {
       "key": "base_url",
       "display": "Base URL",
-      "type": "select",
-      "options": {
-        "https://api.siliconflow.cn/v1": "SiliconFlow",
-        "https://api.openai.com/v1": "OpenAI",
-        "https://openrouter.ai/api/v1": "OpenRouter",
-        "https://dashscope.aliyuncs.com/compatible-mode/v1": "Alibaba Cloud Bailian",
-        "https://api.moonshot.cn/v1": "Moonshot AI",
-        "https://api.deepseek.com/v1": "DeepSeek",
-        "http://localhost:1234/v1": "LM Studio (Local)",
-        "http://localhost:11434/v1": "Ollama (Local)"
-      }
+      "type": "input"
     },
     {
       "key": "apiKey",

@@ -5,6 +5,7 @@ import vm from "node:vm";
 
 const source = await readFile(new URL("../main.js", import.meta.url), "utf8");
 const info = JSON.parse(await readFile(new URL("../info.json", import.meta.url), "utf8"));
+const customInfo = JSON.parse(await readFile(new URL("../custom/info.json", import.meta.url), "utf8"));
 
 async function loadRecognize() {
     const context = {};
@@ -20,8 +21,15 @@ test("provides mainstream Base URL presets", () => {
     assert.equal(baseUrl.options["https://api.openai.com/v1"], "OpenAI");
     assert.equal(baseUrl.options["https://openrouter.ai/api/v1"], "OpenRouter");
     assert.equal(baseUrl.options["http://localhost:1234/v1"], "LM Studio (Local)");
-    assert.equal(baseUrl.options.__custom__, "Custom");
-    assert.equal(info.needs.some((item) => item.key === "custom_base_url"), true);
+    assert.equal(info.needs.some((item) => item.key === "custom_base_url"), false);
+});
+
+test("provides a separate custom URL plugin", () => {
+    const baseUrl = customInfo.needs.find((item) => item.key === "base_url");
+
+    assert.equal(customInfo.id, "plugin.com.dean-op.llm_ocr_custom");
+    assert.equal(baseUrl.type, "input");
+    assert.equal(customInfo.needs.some((item) => item.key === "custom_base_url"), false);
 });
 
 test("normalizes base URL and sends a multimodal request", async () => {
@@ -57,8 +65,7 @@ test("uses a manually entered custom base URL", async () => {
     const recognize = await loadRecognize();
     await recognize("aGVsbG8=", "auto", {
         config: {
-            base_url: "__custom__",
-            custom_base_url: "https://custom.example/v1",
+            base_url: "https://custom.example/v1",
             apiKey: "test-key",
             model: "vision-model"
         },
@@ -74,30 +81,6 @@ test("uses a manually entered custom base URL", async () => {
     });
 
     assert.equal(requestUrl, "https://custom.example/v1/chat/completions");
-});
-
-test("preset base URL takes precedence over custom input", async () => {
-    let requestUrl;
-    const recognize = await loadRecognize();
-    await recognize("aGVsbG8=", "auto", {
-        config: {
-            base_url: "https://api.siliconflow.cn/v1",
-            custom_base_url: "https://custom.example/v1",
-            apiKey: "test-key",
-            model: "vision-model"
-        },
-        utils: {
-            tauriFetch: async (url) => {
-                requestUrl = url;
-                return {
-                    ok: true,
-                    data: { choices: [{ message: { content: "预置地址结果" } }] }
-                };
-            }
-        }
-    });
-
-    assert.equal(requestUrl, "https://api.siliconflow.cn/v1/chat/completions");
 });
 
 test("returns array-form message content", async () => {

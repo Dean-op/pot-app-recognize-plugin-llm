@@ -2,7 +2,7 @@
   "name": "pot-app-recognize-plugin-llm",
   "version": "0.1.0",
   "private": true,
-  "description": "OpenAI-compatible multimodal LLM OCR plugin for Pot App",
+  "description": "Preset and custom OpenAI-compatible multimodal LLM OCR plugins for Pot App",
   "license": "GPL-3.0",
   "engines": {
     "node": ">=18"
